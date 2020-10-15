@@ -238,6 +238,7 @@ class _ClubPageState extends State<ClubPage>
         .toggleClubSubscription(widget.club.id, AppConstants.djangoToken)
         .then((snapshot) async {
       print("status of club subscription: ${snapshot.statusCode}");
+
       if (snapshot.statusCode == 200) {
         await AppConstants.updateClubSubscriptionInDatabase(
             clubId: widget.club.id,

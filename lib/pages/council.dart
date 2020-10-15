@@ -8,6 +8,7 @@ import 'package:iit_app/pages/club_council_common/description.dart';
 import 'package:iit_app/ui/colorPicker.dart';
 import 'package:iit_app/ui/text_style.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:iit_app/screens/account.dart';
 
 class CouncilPage extends StatefulWidget {
   @override
@@ -26,6 +27,10 @@ class _CouncilPageState extends State<CouncilPage> {
       _bodyBg = false,
       _panelBg = false,
       _porBg = false;
+
+  flag() {
+    AccountScreen.flag = "Council";
+  }
 
   setColorPalleteOff() {
     _mainBg = false;
@@ -149,7 +154,7 @@ class _CouncilPageState extends State<CouncilPage> {
   void initState() {
     this._colorListener = ValueNotifier(Colors.white);
     this._colorPicker = ColorPicker(this._colorListener);
-
+    flag();
     fetchCouncilById();
     super.initState();
   }

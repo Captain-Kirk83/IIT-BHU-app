@@ -4,18 +4,22 @@ import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
 import 'package:iit_app/pages/club_council_common/club_&_council_widgets.dart';
 import 'package:iit_app/screens/drawer.dart';
+import 'package:iit_app/screens/home/home.dart';
 
 class AccountScreen extends StatefulWidget {
+  static String flag = "Account";
   @override
-  _AccountScreenState createState() => _AccountScreenState();
+  AccountScreenState createState() => AccountScreenState();
 }
 
-class _AccountScreenState extends State<AccountScreen> {
+class AccountScreenState extends State<AccountScreen> {
   BuiltProfilePost profileDetails;
+  ValueNotifier updateListener = ValueNotifier(false);
 
   @override
   void initState() {
     fetchProfileDetails();
+    attempt1();
     super.initState();
   }
 
@@ -110,6 +114,33 @@ class _AccountScreenState extends State<AccountScreen> {
     Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
   }
 
+  Widget subscribe(String v) {
+    print("Subscribed: $v");
+    print("Flag:${AccountScreen.flag}");
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: profileDetails.subscriptions.length,
+      itemBuilder: (context, index) {
+        return ClubAndCouncilWidgets.getClubCard(
+            clubTypeForHero: 'Subscriptions',
+            context: context,
+            title: profileDetails.subscriptions[index].name,
+            subtitle: profileDetails.subscriptions[index].council.name,
+            id: profileDetails.subscriptions[index].id,
+            imageUrl: profileDetails.subscriptions[index].small_image_url,
+            club: profileDetails.subscriptions[index],
+            isCouncil: false,
+            horizontal: true);
+      },
+    );
+  }
+
+  attempt1() {
+    AccountScreen.flag = "Account";
+    print(AccountScreen.flag);
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -125,7 +156,8 @@ class _AccountScreenState extends State<AccountScreen> {
             iconTheme: IconThemeData(color: Colors.black87),
             leading: IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => HomeScreen())),
             ),
           ),
           drawer: SideBar(context: context),
@@ -263,37 +295,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             : profileDetails.subscriptions.length == 0
                                 ? Text(
                                     'You haven\'t subscribed to any channels yet!')
-                                : Container(
-                                    child: ListView.builder(
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount:
-                                          profileDetails.subscriptions.length,
-                                      itemBuilder: (context, index) {
-                                        return ClubAndCouncilWidgets
-                                            .getClubCard(
-                                                clubTypeForHero:
-                                                    'Subscriptions',
-                                                context: context,
-                                                title: profileDetails
-                                                    .subscriptions[index].name,
-                                                subtitle: profileDetails
-                                                    .subscriptions[index]
-                                                    .council
-                                                    .name,
-                                                id: profileDetails
-                                                    .subscriptions[index].id,
-                                                imageUrl: profileDetails
-                                                    .subscriptions[index]
-                                                    .small_image_url,
-                                                club: profileDetails
-                                                    .subscriptions[index],
-                                                isCouncil: false,
-                                                horizontal: true);
-                                      },
-                                    ),
-                                  ),
+                                : Container(child: subscribe("Trial")),
                         SizedBox(
                           height: 22,
                         ),
