@@ -9,17 +9,16 @@ import 'package:iit_app/screens/home/home.dart';
 class AccountScreen extends StatefulWidget {
   static String flag = "Account";
   @override
-  AccountScreenState createState() => AccountScreenState();
+  _AccountScreenState createState() => _AccountScreenState();
 }
 
-class AccountScreenState extends State<AccountScreen> {
+class _AccountScreenState extends State<AccountScreen> {
   BuiltProfilePost profileDetails;
-  ValueNotifier updateListener = ValueNotifier(false);
 
   @override
   void initState() {
     fetchProfileDetails();
-    attempt1();
+    flagmarker();
     super.initState();
   }
 
@@ -114,7 +113,7 @@ class AccountScreenState extends State<AccountScreen> {
     Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
   }
 
-  Widget subscribe(String v) {
+  Widget subscribed(String v) {
     print("Subscribed: $v");
     print("Flag:${AccountScreen.flag}");
     return ListView.builder(
@@ -136,7 +135,7 @@ class AccountScreenState extends State<AccountScreen> {
     );
   }
 
-  attempt1() {
+  flagmarker() {
     AccountScreen.flag = "Account";
     print(AccountScreen.flag);
   }
@@ -295,7 +294,7 @@ class AccountScreenState extends State<AccountScreen> {
                             : profileDetails.subscriptions.length == 0
                                 ? Text(
                                     'You haven\'t subscribed to any channels yet!')
-                                : Container(child: subscribe("Trial")),
+                                : Container(child: subscribed("Trial")),
                         SizedBox(
                           height: 22,
                         ),
