@@ -8,6 +8,7 @@ import 'package:iit_app/screens/home/home_widgets.dart';
 import 'package:iit_app/screens/home/search_workshop.dart';
 import 'package:iit_app/screens/drawer.dart';
 import 'package:iit_app/ui/colorPicker.dart';
+import 'package:flutter/services.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -87,7 +88,8 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 FlatButton(
                   child: Text('Yes'),
-                  onPressed: () => Navigator.pop(context, true),
+                  onPressed: () => SystemChannels.platform
+                      .invokeMethod('SystemNavigator.pop'),
                 )
               ],
             ));
