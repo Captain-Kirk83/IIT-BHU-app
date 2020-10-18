@@ -75,6 +75,36 @@
         "code",
         "bug"
       ]
+    },
+    {
+      "login": "ARJUPTA",
+      "name": "Arjun Gupta",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/64064110?v=4",
+      "profile": "https://github.com/ARJUPTA",
+      "contributions": [
+        "code",
+        "design"
+      ]
+    },
+    {
+      "login": "nb9960",
+      "name": "Nishtha Bodani",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/63557873?v=4",
+      "profile": "https://github.com/nb9960",
+      "contributions": [
+        "code",
+        "bug"
+      ]
+    },
+    {
+      "login": "Satendra124",
+      "name": "Satendra Raj",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/60358771?v=4",
+      "profile": "https://github.com/Satendra124",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,

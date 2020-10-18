@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/screens/map.dart';
 import 'package:iit_app/screens/account.dart';
 import 'package:iit_app/screens/allWorkshops.dart';
@@ -13,6 +14,7 @@ import 'package:iit_app/screens/about.dart';
 import 'package:iit_app/screens/settings.dart';
 import 'package:iit_app/services/connectivityCheck.dart';
 import 'package:iit_app/services/crud.dart';
+import 'package:iit_app/ui/theme.dart';
 import 'data/post_api_service.dart';
 import 'model/appConstants.dart';
 
@@ -25,6 +27,10 @@ void main() async {
   AppConstants.service = PostApiService.create();
   AppConstants.connectionStatus = ConnectionStatusSingleton.getInstance();
   AppConstants.connectionStatus.initialize();
+
+// TODO: populating the ColorConstants. Use sharedPreference here to find out the correct theme.
+  AppTheme.dark();
+
   await AppConstants.setDeviceDirectoryForImages();
   // bool logStatus = await CrudMethods.isLoggedIn();
   // print('log status: $logStatus');
@@ -94,9 +100,7 @@ class _ConnectedMainState extends State<ConnectedMain> {
   Widget build(BuildContext context) {
     return this._isOnline == null
         ? Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
+            body: Center(child: LoadingCircle),
           )
         : (this._isOnline == false
             ? Scaffold(
@@ -111,8 +115,6 @@ class _ConnectedMainState extends State<ConnectedMain> {
                   ),
                 ),
               )
-            : ((AppConstants.isLoggedIn || AppConstants.isGuest)
-                ? HomeScreen()
-                : LoginPage()));
+            : ((AppConstants.isLoggedIn || AppConstants.isGuest) ? HomeScreen() : LoginPage()));
   }
 }
