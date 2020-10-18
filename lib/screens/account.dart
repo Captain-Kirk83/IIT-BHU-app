@@ -294,7 +294,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             : profileDetails.subscriptions.length == 0
                                 ? Text(
                                     'You haven\'t subscribed to any channels yet!')
-                                : Container(child: subscribed("Trial")),
+                                : Container(child: subscribed("Club")),
                         SizedBox(
                           height: 22,
                         ),
