@@ -9,14 +9,17 @@ import 'package:iit_app/screens/home/search_workshop.dart';
 import 'package:iit_app/screens/drawer.dart';
 import 'package:iit_app/ui/colorPicker.dart';
 import 'package:flutter/services.dart';
+import 'package:iit_app/ui/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../model/sharedPreferenceKeys.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   TabController _tabController;
 
   SearchBarWidget searchBarWidget;
@@ -24,28 +27,41 @@ class _HomeScreenState extends State<HomeScreen>
   ValueNotifier<Color> _colorListener;
   ColorPicker _colorPicker;
 
+  FocusNode searchFocusNode;
+
   bool _mainBg = false,
       _ringBg = false,
       _shimmerBg = false,
       _workshopContainerBg = false,
       _cardBg = false;
 
-  final GlobalKey<FabCircularMenuState> fabKey =
-      GlobalKey<FabCircularMenuState>();
+  final GlobalKey<FabCircularMenuState> fabKey = GlobalKey<FabCircularMenuState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     fetchWorkshopsAndCouncilButtons();
-
+    _setTheme();
     searchListener = ValueNotifier(false);
     searchBarWidget = SearchBarWidget(searchListener);
 
     this._colorListener = ValueNotifier(Colors.white);
     this._colorPicker = ColorPicker(this._colorListener);
 
+    searchFocusNode = FocusNode();
     super.initState();
+  }
+
+  _setTheme() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // print(prefs.getString(SharedPreferenceKeys.usertheme));
+
+    if (prefs.getString(SharedPreferenceKeys.usertheme) == 'light') {
+      AppTheme.light();
+    } else {
+      AppTheme.dark();
+    }
   }
 
   fetchWorkshopsAndCouncilButtons() async {
@@ -58,8 +74,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   void fetchUpdatedDetails() async {
     await AppConstants.updateAndPopulateWorkshops();
-    await AppConstants.writeCouncilLogosIntoDisk(
-        AppConstants.councilsSummaryfromDatabase);
+    await AppConstants.writeCouncilLogosIntoDisk(AppConstants.councilsSummaryfromDatabase);
     setState(() {});
   }
 
@@ -75,11 +90,22 @@ class _HomeScreenState extends State<HomeScreen>
 
       return false;
     }
+    // if on home screen but searchController is onFocus
+    if (!searchBarWidget.isSearching.value && searchFocusNode.hasFocus) {
+      searchBarWidget.searchController.clear();
+      searchFocusNode.unfocus();
+      return false;
+    }
+    // to retrun on home route on popping from search result screen
+    if (searchBarWidget.isSearching.value) {
+      Navigator.pop(context);
+      Navigator.pushNamed(context, '/home');
+      return false;
+    }
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
               title: Text('Do you really want to exit?'),
               actions: <Widget>[
                 FlatButton(
@@ -160,8 +186,7 @@ class _HomeScreenState extends State<HomeScreen>
               onTap: () {
                 setColorPalleteOff();
                 _workshopContainerBg = true;
-                _colorListener.value =
-                    ColorConstants.workshopContainerBackground;
+                _colorListener.value = ColorConstants.workshopContainerBackground;
                 return _colorPicker.getColorPickerDialogBox(context);
               },
               child: Text('container'),
@@ -229,7 +254,9 @@ class _HomeScreenState extends State<HomeScreen>
               drawer: SideBar(context: context),
               floatingActionButton: homeFAB(context, fabKey: fabKey),
               appBar: homeAppBar(context,
-                  searchBarWidget: searchBarWidget, fabKey: fabKey),
+                  searchBarWidget: searchBarWidget,
+                  fabKey: fabKey,
+                  searchFocusNode: searchFocusNode),
               body: GestureDetector(
                 onTap: () {
                   if (fabKey.currentState.isOpen) {

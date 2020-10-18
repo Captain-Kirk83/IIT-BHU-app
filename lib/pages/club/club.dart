@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
+import 'package:iit_app/external_libraries/spin_kit.dart';
 import 'package:iit_app/model/appConstants.dart';
 import 'package:iit_app/model/built_post.dart';
 import 'package:iit_app/model/colorConstants.dart';
@@ -283,7 +284,7 @@ class _ClubPageState extends State<ClubPage>
               ? Container(
                   height: MediaQuery.of(context).size.height * 3 / 4,
                   child: Center(
-                    child: CircularProgressIndicator(),
+                    child: LoadingCircle,
                   ),
                 )
               : Stack(
@@ -321,7 +322,7 @@ class _ClubPageState extends State<ClubPage>
           clubWorkshops == null
               ? Container(
                   height: ClubAndCouncilWidgets.getMinPanelHeight(context),
-                  child: Center(child: CircularProgressIndicator()))
+                  child: Center(child: LoadingCircle))
               : ClubAndCouncilWidgets.getSecies(context,
                   secy: clubMap.secy, joint_secy: clubMap.joint_secy),
           clubMap == null
