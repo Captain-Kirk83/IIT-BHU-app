@@ -189,6 +189,10 @@ class _ClubPageState extends State<ClubPage>
     super.initState();
   }
 
+  void reload() {
+    fetchClubDataById();
+  }
+
   fetchClubDataById() async {
     if (clubMap == null) {
       clubMap =
@@ -363,7 +367,8 @@ class _ClubPageState extends State<ClubPage>
           WorkshopTabs.getActiveAndPastTabBarForClub(
               clubWorkshops: clubWorkshops,
               tabController: _tabController,
-              context: context),
+              context: context,
+              reload: reload),
           space,
         ],
       ),
