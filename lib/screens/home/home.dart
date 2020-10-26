@@ -19,7 +19,8 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   TabController _tabController;
 
   SearchBarWidget searchBarWidget;
@@ -35,7 +36,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       _workshopContainerBg = false,
       _cardBg = false;
 
-  final GlobalKey<FabCircularMenuState> fabKey = GlobalKey<FabCircularMenuState>();
+  final GlobalKey<FabCircularMenuState> fabKey =
+      GlobalKey<FabCircularMenuState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -69,12 +71,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     setState(() {
       AppConstants.firstTimeFetching = false;
     });
-    fetchUpdatedDetails();
-  }
-
-  void fetchUpdatedDetails() async {
     await AppConstants.updateAndPopulateWorkshops();
-    await AppConstants.writeCouncilLogosIntoDisk(AppConstants.councilsSummaryfromDatabase);
+    await AppConstants.writeCouncilLogosIntoDisk(
+        AppConstants.councilsSummaryfromDatabase);
     setState(() {});
   }
 
@@ -105,7 +104,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
               title: Text('Do you really want to exit?'),
               actions: <Widget>[
                 FlatButton(
@@ -186,7 +186,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               onTap: () {
                 setColorPalleteOff();
                 _workshopContainerBg = true;
-                _colorListener.value = ColorConstants.workshopContainerBackground;
+                _colorListener.value =
+                    ColorConstants.workshopContainerBackground;
                 return _colorPicker.getColorPickerDialogBox(context);
               },
               child: Text('container'),
@@ -276,12 +277,12 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                         valueListenable: searchListener,
                         builder: (context, isSearching, child) {
                           return HomeChild(
-                            context: context,
-                            searchBarWidget: searchBarWidget,
-                            tabController: _tabController,
-                            isSearching: isSearching,
-                            fabKey: fabKey,
-                          );
+                              context: context,
+                              searchBarWidget: searchBarWidget,
+                              tabController: _tabController,
+                              isSearching: isSearching,
+                              fabKey: fabKey,
+                              reload: () => {setState(() {})});
                         },
                       ),
                     ),
