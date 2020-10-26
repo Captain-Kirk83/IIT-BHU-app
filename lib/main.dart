@@ -17,6 +17,8 @@ import 'package:iit_app/services/crud.dart';
 import 'package:iit_app/ui/theme.dart';
 import 'data/post_api_service.dart';
 import 'model/appConstants.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:iit_app/services/pushNotification.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +29,8 @@ void main() async {
   AppConstants.service = PostApiService.create();
   AppConstants.connectionStatus = ConnectionStatusSingleton.getInstance();
   AppConstants.connectionStatus.initialize();
+
+  PushNotification.initialize();
 
 // TODO: populating the ColorConstants. Use sharedPreference here to find out the correct theme.
   AppTheme.dark();
@@ -72,11 +76,16 @@ class ConnectedMain extends StatefulWidget {
 class _ConnectedMainState extends State<ConnectedMain> {
   bool _isOnline;
   bool _tappable = true;
+  //String _message = '';
+
+  //final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
   void initState() {
     checkConnection();
+
     super.initState();
+    //getNotification();
   }
 
   void checkConnection() async {
@@ -95,6 +104,42 @@ class _ConnectedMainState extends State<ConnectedMain> {
       this._tappable = true;
     });
   }
+
+  /*void getNotification() {
+    _firebaseMessaging.getToken().then((token) => print("fcm token:$token"));
+    _firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) async {
+          print('on message $message');
+          _popNotification(message["notification"]["title"]);
+          setState(() => _message = message["notification"]["title"]);
+        },
+        onResume: (Map<String, dynamic> message) async {
+          print('on resume $message');
+          setState(() => _message = message["notification"]["title"]);
+        },
+        onLaunch: (Map<String, dynamic> message) async {
+          print('on launch $message');
+          setState(() => _message = message["notification"]["title"]);
+        },
+        onBackgroundMessage: myBackgroundMessageHandler);
+  }
+
+  Future<void> _popNotification(note) async {
+    return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
+              title: Text(note),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Show'),
+                  onPressed: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomeScreen())),
+                ),
+              ],
+            ));
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +160,12 @@ class _ConnectedMainState extends State<ConnectedMain> {
                   ),
                 ),
               )
-            : ((AppConstants.isLoggedIn || AppConstants.isGuest) ? HomeScreen() : LoginPage()));
+            : ((AppConstants.isLoggedIn || AppConstants.isGuest)
+                ? HomeScreen()
+                : LoginPage()));
   }
 }
+
+/*Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
+  print('on Backgroundmessage: $message');
+}*/
